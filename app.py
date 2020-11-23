@@ -32,11 +32,13 @@ class KillerPerks(db.Model):
 class Survivor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
+    url = db.column(db.string(100), nullable=False)
 
 
 class Killer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
+    url = db.Column(db.String(100), nullable=False)
 
 
 class survPerkSchema(ma.Schema):
@@ -51,12 +53,12 @@ class killPerkSchema(ma.Schema):
 
 class survivorSchema(ma.Schema):
     class Meta:
-        fields = ("id", "name")
+        fields = ("id", "name", "url")
 
 
 class killerSchema(ma.Schema):
     class Meta:
-        fields = ("id", "name")
+        fields = ("id", "name", "url")
 
 
 surv_perk_schema = survPerkSchema()
@@ -72,8 +74,8 @@ killer_schema = killerSchema()
 killers_schema = killerSchema(many=True)
 
 
-# Survivor routes below
-@app.route("/add-book", methods=["POST"])
+# Survivor perk routes below
+@app.route("/add-survivor-perk", methods=["POST"])
 def add_surv_perk():
     name = request.json["name"]
     description = request.json["description"]
@@ -94,11 +96,96 @@ def get_surv_perks():
     return jsonify(result)
 
 
-@app.route("/edit-survivor-perk/<id>", methods=["PATCH"])
+@app.route("/edit-survivor-perk/<id>", methods=["PUT"])
 def update_surv_perk(id):
     surv_perk = SurvPerk.query.get(id)
     name = request.json['name']
     description = request.json['description']
+    surv_perk.name = name
+    surv_perk.description = description
+    return jsonify(message="Successful edit")
+
+
+@app.route("/delete-survivor-perk/<id>", methods=["DELETE"])
+def delete_surv_perk(id):
+    surv_perk = SurvPerk.query.get(id)
+    db.session.delete(surv_perk)
+    db.session.commit()
+    return jsonify(message="Survivor perk deleted successfully")
+
+# Survivor character routes
+
+
+@app.route("/add-survivor", methods=["POST"])
+def add_survivor():
+    name = request.json["name"]
+    url = request.json["url"]
+    new_survivor = Survivor(
+        name=name,
+        url=url
+    )
+    db.session.add(new_survivor)
+    db.session.commit()
+    survivor = Survivor.query.get(new_survivor.id)
+    return jsonify(message="Survivor successfully added")
+
+
+@app.route("/survivors", methods=["GET"])
+def get_survivors():
+    all_survivors = Survivor.query.all()
+    result = survivors_schema.dump(all_survivors)
+    return jsonify(result)
+
+
+@app.route("/edit-survivor/<id>", methods=["PUT"])
+def update_survivor(id):
+    survivor = survivor.query.get(id)
+    name = request.json['name']
+    url = request.json['url']
+    survivor.name = name
+    survivor.url = url
+    return jsonify(message="Successful edit")
+
+
+@app.route("/delete-survivor/<id>", methods=["DELETE"])
+def delete_survivor(id):
+    survivor = Survivor.query.get(id)
+    db.session.delete(surivor)
+    db.session.commit()
+    return jsonify(message="Survivor deleted successfully")
+
+# Killer character routes
+
+
+@app.route("/add-killer", methods=["POST"])
+def add_killer():
+    name = request.json["name"]
+    url = request.json["url"]
+    new_killer = Killer(
+        name=name
+        url=url
+    )
+    db.session.add(new_killer)
+    db.session.commit()
+    killer = Killer.query.get(new_killer.id)
+    return jsonify(message="Killer successfully added")
+
+
+@app.route("/killers", methods=["GET"])
+def get_killers():
+    all_killers = Killer.query.all()
+    result = survivors_schema.dump(all_killers)
+    return jsonify(result)
+
+
+@app.route("/edit-killer/<id>", method=["PUT"])
+def update_killer(id):
+    killer = killer.query.get(id)
+    name = request.json["name"]
+    url = request.json["url"]
+    killer.name = name
+    killer.url = url
+    return jsonify("Successful edit")
 
 
 if __name__ == "__main__":
