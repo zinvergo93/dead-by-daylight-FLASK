@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config('SQLALCHEMY_DATABASE_URI') = 'sqlite:///' + os.path.join(
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(
     basedir, 'app.sqlite'
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -21,11 +21,6 @@ class SurvivorPerk(db.Model):
     description = db.Column(db.String(1000), nullable=False)
     teachable = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, name, description, teachable):
-        self.name = name
-        self.description = description
-        self.teachable = teachable
-
 
 class KillerPerk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,16 +28,11 @@ class KillerPerk(db.Model):
     description = db.Column(db.String(1000), nullable=False)
     teachable = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, name, description, teachable):
-        self.name = name
-        self.description = description
-        self.teachable = teachable
-
 
 class Survivor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    url = db.column(db.string(100), nullable=False)
+    url = db.Column(db.String(100), nullable=False)
 
 
 class Killer(db.Model):
@@ -176,7 +166,7 @@ def add_killer():
     name = request.json["name"]
     url = request.json["url"]
     new_killer = Killer(
-        name=name
+        name=name,
         url=url
     )
     db.session.add(new_killer)
@@ -192,7 +182,7 @@ def get_killers():
     return jsonify(result)
 
 
-@app.route("/edit-killer/<id>", method=["PUT"])
+@app.route("/edit-killer/<id>", methods=["PUT"])
 def update_killer(id):
     killer = killer.query.get(id)
     name = request.json["name"]
@@ -202,7 +192,7 @@ def update_killer(id):
     return jsonify("Successful killer edit")
 
 
-@app.route("/delete-killer/<id>", method=["DELETE"])
+@app.route("/delete-killer/<id>", methods=["DELETE"])
 def delete_killer(id):
     killer = Killer.query.get(id)
     db.session.delete(killer)
@@ -212,7 +202,7 @@ def delete_killer(id):
 # Killer perks routes
 
 
-@app.route("/add-killer-perk", method=["POST"])
+@app.route("/add-killer-perk", methods=["POST"])
 def add_killer_perk():
     name = request.json["name"]
     description = request.json["description"]
@@ -230,7 +220,7 @@ def add_killer_perk():
 
 @app.route("/killer-perks", methods=["GET"])
 def get_killer_perks():
-    all_perks = KillPerk.query.all()
+    all_perks = KillerPerk.query.all()
     result = kill_perks_schema.dump(all_perks)
     return jsonify(result)
 
