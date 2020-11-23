@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f059f77466ef226483878bf226d6ff309ab7a9069d2edeb61f1f6416fc8b39ef"
+            "sha256": "fd56745339acd01b5ccd788809d1b57c13fe380e1443b921f8b6dd039e887f73"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -31,14 +31,6 @@
             ],
             "index": "pypi",
             "version": "==1.1.2"
-        },
-        "flask-cors": {
-            "hashes": [
-                "sha256:6bcfc100288c5d1bcb1dbb854babd59beee622ffd321e444b05f24d6d58466b8",
-                "sha256:cee4480aaee421ed029eaa788f4049e3e26d15b5affb6a880dade6bafad38324"
-            ],
-            "index": "pypi",
-            "version": "==3.0.9"
         },
         "flask-marshmallow": {
             "hashes": [
@@ -178,21 +170,6 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.3.20"
-        },
-        "sqlalchemy-imageattach": {
-            "hashes": [
-                "sha256:7a143a820767458ad07380a4e405126bba5cfe5b74478f317d4d58e44cdc1df4",
-                "sha256:a9e3d56da889119e2105b3fee660ec259bb3b51be28173efb1ba129a52710ec4"
-            ],
-            "index": "pypi",
-            "version": "==1.1.0"
-        },
-        "wand": {
-            "hashes": [
-                "sha256:566b3d049858efa879096a7ab2e0516d67a240e6c3ffd7a267298c41e81c14b7",
-                "sha256:d21429288fe0de63d829dbbfb26736ebaed9fd0792c2a0dc5943c5cab803a708"
-            ],
-            "version": "==0.6.3"
         },
         "werkzeug": {
             "hashes": [

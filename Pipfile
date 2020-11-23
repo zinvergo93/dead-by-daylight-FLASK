@@ -7,9 +7,7 @@ name = "pypi"
 flask = "*"
 flask-sqlalchemy = "*"
 flask-marshmallow = "*"
-flask-cors = "*"
 marshmallow-sqlalchemy = "*"
-sqlalchemy-imageattach = "*"
 
 [dev-packages]
 

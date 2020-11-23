@@ -1,14 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_marshmall import Marshmallow
+from flask_marshmallow import Marshmallow
 import os
 
 
 app = Flask(__name__)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config("SQLALCHEMY_DATABASE_URI") = "sqlite:///" + os.path.join(
-    basedir, "app.sqlite"
+app.config('SQLALCHEMY_DATABASE_URI') = 'sqlite:///' + os.path.join(
+    basedir, 'app.sqlite'
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -21,12 +21,22 @@ class SurvivorPerk(db.Model):
     description = db.Column(db.String(1000), nullable=False)
     teachable = db.Column(db.String(50), nullable=False)
 
+    def __init__(self, name, description, teachable):
+        self.name = name
+        self.description = description
+        self.teachable = teachable
+
 
 class KillerPerk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(1000), nullable=False)
     teachable = db.Column(db.String(50), nullable=False)
+
+    def __init__(self, name, description, teachable):
+        self.name = name
+        self.description = description
+        self.teachable = teachable
 
 
 class Survivor(db.Model):
@@ -79,9 +89,11 @@ killers_schema = killerSchema(many=True)
 def add_surv_perk():
     name = request.json["name"]
     description = request.json["description"]
+    teachable = request.json["teachable"]
     new_surv_perk = SurvivorPerk(
         name=name,
-        description=description
+        description=description,
+        teachable=teachable
     )
     db.session.add(new_book)
     db.session.commit()
@@ -101,8 +113,10 @@ def update_surv_perk(id):
     surv_perk = SurvivorPerk.query.get(id)
     name = request.json['name']
     description = request.json['description']
+    teachable = request.json['teachable']
     surv_perk.name = name
     surv_perk.description = description
+    surv_perk.teachable = teachable
     return jsonify(message="Successful survivor perk edit")
 
 
@@ -202,9 +216,11 @@ def delete_killer(id):
 def add_killer_perk():
     name = request.json["name"]
     description = request.json["description"]
+    teachable = request.json["teachable"]
     new_killer_perk = KillerPerk(
         name=name,
-        description=description
+        description=description,
+        teachable=teachable
     )
     db.session.add(new_killer_perk)
     db.session.commit()
@@ -224,8 +240,10 @@ def update_killer_perk(id):
     killer_perk = KillerPerk.query.get(id)
     name = request.json['name']
     description = request.json['description']
+    teachable = request.json['teachable']
     killer_perk.name = name
     killer_perk.description = description
+    killer_perk.teachable = teachable
     return jsonify(message="Successful killer perk edit")
 
 
