@@ -15,14 +15,14 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
 
-class SurvivorPerks(db.Model):
+class SurvivorPerk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(1000), nullable=False)
     teachable = db.Column(db.String(50), nullable=False)
 
 
-class KillerPerks(db.Model):
+class KillerPerk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(1000), nullable=False)
@@ -79,36 +79,36 @@ killers_schema = killerSchema(many=True)
 def add_surv_perk():
     name = request.json["name"]
     description = request.json["description"]
-    new_surv_perk = SurvPerk(
+    new_surv_perk = SurvivorPerk(
         name=name,
         description=description
     )
     db.session.add(new_book)
     db.session.commit()
-    surv_perk = SurvPerk.query.get(new_surv_perk.id)
+    surv_perk = SurvivorPerk.query.get(new_surv_perk.id)
     return jsonify(message="Survivor perk added successfully")
 
 
 @app.route("/survivor-perks", methods=["GET"])
 def get_surv_perks():
-    all_perks = SurvPerk.query.all()
+    all_perks = SurvivorPerk.query.all()
     result = surv_perks_schema.dump(all_perks)
     return jsonify(result)
 
 
 @app.route("/edit-survivor-perk/<id>", methods=["PUT"])
 def update_surv_perk(id):
-    surv_perk = SurvPerk.query.get(id)
+    surv_perk = SurvivorPerk.query.get(id)
     name = request.json['name']
     description = request.json['description']
     surv_perk.name = name
     surv_perk.description = description
-    return jsonify(message="Successful edit")
+    return jsonify(message="Successful survivor perk edit")
 
 
 @app.route("/delete-survivor-perk/<id>", methods=["DELETE"])
 def delete_surv_perk(id):
-    surv_perk = SurvPerk.query.get(id)
+    surv_perk = SurvivorPerk.query.get(id)
     db.session.delete(surv_perk)
     db.session.commit()
     return jsonify(message="Survivor perk deleted successfully")
@@ -139,12 +139,12 @@ def get_survivors():
 
 @app.route("/edit-survivor/<id>", methods=["PUT"])
 def update_survivor(id):
-    survivor = survivor.query.get(id)
+    survivor = Survivor.query.get(id)
     name = request.json['name']
     url = request.json['url']
     survivor.name = name
     survivor.url = url
-    return jsonify(message="Successful edit")
+    return jsonify(message="Successful survivor  edit")
 
 
 @app.route("/delete-survivor/<id>", methods=["DELETE"])
@@ -174,7 +174,7 @@ def add_killer():
 @app.route("/killers", methods=["GET"])
 def get_killers():
     all_killers = Killer.query.all()
-    result = survivors_schema.dump(all_killers)
+    result = killers_schema.dump(all_killers)
     return jsonify(result)
 
 
@@ -185,7 +185,56 @@ def update_killer(id):
     url = request.json["url"]
     killer.name = name
     killer.url = url
-    return jsonify("Successful edit")
+    return jsonify("Successful killer edit")
+
+
+@app.route("/delete-killer/<id>", method=["DELETE"])
+def delete_killer(id):
+    killer = Killer.query.get(id)
+    db.session.delete(killer)
+    db.session.commit()
+    return jsonify(message="Killer successfully deleted")
+
+# Killer perks routes
+
+
+@app.route("/add-killer-perk", method=["POST"])
+def add_killer_perk():
+    name = request.json["name"]
+    description = request.json["description"]
+    new_killer_perk = KillerPerk(
+        name=name,
+        description=description
+    )
+    db.session.add(new_killer_perk)
+    db.session.commit()
+    killer_perk = KillerPerk.query.get(new_killer_perk.id)
+    return jsonify(message="Killer perk added successfully")
+
+
+@app.route("/killer-perks", methods=["GET"])
+def get_killer_perks():
+    all_perks = KillPerk.query.all()
+    result = kill_perks_schema.dump(all_perks)
+    return jsonify(result)
+
+
+@app.route("/edit-killer-perk/<id>", methods=["PUT"])
+def update_killer_perk(id):
+    killer_perk = KillerPerk.query.get(id)
+    name = request.json['name']
+    description = request.json['description']
+    killer_perk.name = name
+    killer_perk.description = description
+    return jsonify(message="Successful killer perk edit")
+
+
+@app.route("/delete-killer-perk/<id>", methods=["DELETE"])
+def delete_killer_perk(id):
+    killer_perk = KillerPerk.query.get(id)
+    db.session.delete(killer_perk)
+    db.session.commit()
+    return jsonify(message="Killer Perk successfully deleted")
 
 
 if __name__ == "__main__":
