@@ -85,7 +85,7 @@ def add_surv_perk():
         description=description,
         teachable=teachable
     )
-    db.session.add(new_book)
+    db.session.add(new_surv_perk)
     db.session.commit()
     surv_perk = SurvivorPerk.query.get(new_surv_perk.id)
     return jsonify(message="Survivor perk added successfully")
@@ -107,6 +107,7 @@ def update_surv_perk(id):
     surv_perk.name = name
     surv_perk.description = description
     surv_perk.teachable = teachable
+    db.session.commit()
     return jsonify(message="Successful survivor perk edit")
 
 
@@ -144,17 +145,19 @@ def get_survivors():
 @app.route("/edit-survivor/<id>", methods=["PUT"])
 def update_survivor(id):
     survivor = Survivor.query.get(id)
-    name = request.json['name']
-    url = request.json['url']
+    print(survivor)
+    name = request.json["name"]
+    url = request.json["url"]
     survivor.name = name
     survivor.url = url
+    db.session.commit()
     return jsonify(message="Successful survivor  edit")
 
 
 @app.route("/delete-survivor/<id>", methods=["DELETE"])
 def delete_survivor(id):
     survivor = Survivor.query.get(id)
-    db.session.delete(surivor)
+    db.session.delete(survivor)
     db.session.commit()
     return jsonify(message="Survivor deleted successfully")
 
@@ -184,11 +187,12 @@ def get_killers():
 
 @app.route("/edit-killer/<id>", methods=["PUT"])
 def update_killer(id):
-    killer = killer.query.get(id)
+    killer = Killer.query.get(id)
     name = request.json["name"]
     url = request.json["url"]
     killer.name = name
     killer.url = url
+    db.session.commit()
     return jsonify("Successful killer edit")
 
 
@@ -234,6 +238,7 @@ def update_killer_perk(id):
     killer_perk.name = name
     killer_perk.description = description
     killer_perk.teachable = teachable
+    db.session.commit()
     return jsonify(message="Successful killer perk edit")
 
 
