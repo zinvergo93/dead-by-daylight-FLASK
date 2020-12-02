@@ -13,6 +13,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('DATABASE_URL')
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(
 #     basedir, 'app.sqlite'
 # )
+
+# load database
+#      from sqlite:///Users/dim/Downloads/lastfm_tags.db
+#      into postgresql:///tags
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
